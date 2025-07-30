@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice Recorder</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Speak and Save Your Words</h1>
+        <button id="recordBtn">Start Recording</button>
+        <p id="status">Click the button and speak...</p>
+        <div class="output-box">
+            <h2>Your Last Speech:</h2>
+            <p id="speechText">{{ text }}</p>
+        </div>
+        <!-- Download button removed -->
+    </div>
+<script>
+document.getElementById('recordBtn').onclick = function() {
+    document.getElementById('status').innerText = 'Listening...';
+    fetch('/record', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            document.getElementById('status').innerText = '✅ Recorded!';
+            document.getElementById('speechText').innerText = data.text;
+        } else {
+            document.getElementById('status').innerText = '❌ ' + data.message;
+        }
+    });
+}
+</script>
+</body>
+</html>
